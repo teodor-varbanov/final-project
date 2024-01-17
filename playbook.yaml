@@ -7,7 +7,7 @@
     lila_name: "lila"
     mongo_name: "mongo"
     redis_name: "redis"
-    tag: "0.30"
+    tag: "0.31"
     front_port: "9663"
     listener_port: "9664"
     mongo_port: "27017"
@@ -31,16 +31,6 @@
     #  docker_login:
     #    username: dodo1845
     #    password: "{{ docker_pass }}"
-
-    - name: Build Lila Front (w/ litener) image
-      docker_image:
-        name: "{{ lila_name }}:{{ tag }}"
-        source: build
-        build:
-          path: ./lila/
-        state: present
-      #  push: true
-      #  repository: dodo1845/dodohub 
   
     - name: Build MongoDB image
       docker_image:
@@ -79,7 +69,17 @@
         detach: true
         ports:
           - "{{ mongo_port }}:{{ mongo_port }}"
-
+          
+    - name: Build Lila Front (w/ litener) image
+      docker_image:
+        name: "{{ lila_name }}:{{ tag }}"
+        source: build
+        build:
+          path: ./lila/
+        state: present
+      #  push: true
+      #  repository: dodo1845/dodohub 
+      
     - name: Run Lila (front and listener) container
       docker_container:
         name: "{{ lila_name }}"
